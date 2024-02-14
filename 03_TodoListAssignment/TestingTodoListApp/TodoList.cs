@@ -30,21 +30,28 @@ namespace TestingTodoListApp
 
         }
 
-        public void RemoveItemFromList(TodoTask item)
+        public void RemoveItemFromList(int itemID)
         {
-            if (_tasks.Contains(item))
+            var itemToRemove = _tasks.FirstOrDefault(task => task.Id == itemID);
+            if (itemToRemove != null)
             {
-                _tasks.Remove(item with { Id = _taskCounter-- });
-
+                _tasks.Remove(itemToRemove);
+                _taskCounter--; // Decrement after successful removal
             }
-
         }
 
         public void CompleteItem(int id)
         {
             // remove the item
-            var item = _tasks.First(x => x.Id == id);
-            RemoveItemFromList(item);
+            try
+            {
+                var item = _tasks.First(x => x.Id == id);
+                RemoveItemFromList(item.Id);
+            }
+            catch (Exception e)
+            {
+                throw e; // Re-raise the exception
+            }
         }
     }
 }
